@@ -36,6 +36,9 @@ jobs:
       - name: Install Composer deps
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
+      - name: Copy .env
+        run: cp .env.testing .env
+
       - name: Generate key
         run: php artisan key:generate --env=testing
 

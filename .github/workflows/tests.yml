@@ -44,9 +44,9 @@ jobs:
 
       - name: Update .env to use Redis service
         run: |
-          echo "REDIS_HOST="127.0.0.1"" >> .env
-          echo "REDIS_PORT="6379"" >> .env
-          echo "REDIS_CLIENT="predis"" >> .env
+          echo 'REDIS_HOST="127.0.0.1"' >> .env
+          echo 'REDIS_PORT="6379"' >> .env
+          echo 'REDIS_CLIENT="predis"' >> .env
 
       - name: Generate Application Key
         run: php artisan key:generate

@@ -5,13 +5,10 @@ import { defineConfig, devices } from '@playwright/test';
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-import dotenv from 'dotenv';
-import path, { dirname } from 'path';
-import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-dotenv.config({ path: path.resolve(__dirname, '.env') });
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = dirname(__filename);
+// dotenv.config({ path: path.resolve(__dirname, '.env.testing') });
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -33,11 +30,11 @@ export default defineConfig<LaravelOptions>({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: process.env.BASE_URL,
+    baseURL: 'http://localhost:8000',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
-    laravelBaseUrl: `${process.env.BASE_URL}/playwright`,
+    laravelBaseUrl: 'http://localhost:8000/playwright',
   },
 
   /* Configure projects for major browsers */

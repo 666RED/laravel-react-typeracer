@@ -39,11 +39,10 @@ jobs:
       - name: Copy .env
         run: cp .env.testing .env
 
-      - name: Generate key
-        run: php artisan key:generate
-
-      - name: Clear config cache
-        run: php artisan config:cache
+      - name: Set key
+        run: |
+          echo "" >> .env
+          echo "APP_KEY=${{secrets.APP_KEY}}" >> .env
 
       - name: Run migrations
         run: php artisan migrate --force

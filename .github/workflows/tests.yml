@@ -42,12 +42,6 @@ jobs:
       - name: Copy Environment File
         run: cp .env.example .env
 
-      - name: Update .env to use Redis service
-        run: |
-          echo 'REDIS_HOST=$REDIS_HOST' >> .env
-          echo 'REDIS_PORT=$REDIS_PORT' >> .env
-          echo 'REDIS_CLIENT=$REDIS_CLIENT' >> .env
-
       - name: Generate Application Key
         run: php artisan key:generate
 

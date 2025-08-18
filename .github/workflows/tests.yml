@@ -59,11 +59,13 @@ jobs:
 
       - name: Setup Cloudinary configuation
         run: |
+          cat <<EOT >> .env
           echo "CLOUDINARY_URL=${{secrets.CLOUDINARY_URL}}" >> .env
           echo "CLOUDINARY_CLOUD_NAME=${{secrets.CLOUDINARY_CLOUD_NAME}}" >> .env
           echo "CLOUDINARY_API_KEY=${{secrets.CLOUDINARY_API_KEY}}" >> .env
           echo "CLOUDINARY_API_SECRET=${{secrets.CLOUDINARY_API_SECRET}}" >> .env
           echo "CLOUDINARY_SECURE_URL=${{secrets.CLOUDINARY_SECURE_URL}}" >> .env
+          EOT
 
       - name: Run backend tests
         run: php artisan test --coverage

@@ -8,7 +8,6 @@
 /storage/pail
 /vendor
 .env
-.env.testing
 .env.prod
 .phpactor.json
 .phpunit.result.cache

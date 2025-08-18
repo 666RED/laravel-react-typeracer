@@ -8,7 +8,8 @@
 /storage/pail
 /vendor
 .env
-.env.*
+.env.testing
+.env.prod
 .phpactor.json
 .phpunit.result.cache
 Homestead.json

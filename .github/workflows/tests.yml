@@ -44,6 +44,9 @@ jobs:
           echo "" >> .env
           echo "APP_KEY=${{secrets.APP_KEY}}" >> .env
 
+      - name: Set config cache
+        run: php artisan config:cache
+
       - name: Run migrations
         run: php artisan migrate --force
 

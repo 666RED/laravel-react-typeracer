@@ -50,6 +50,12 @@ jobs:
       - name: Run migrations
         run: php artisan migrate --force
 
+      - name: Install JS dependencies
+        run: npm ci
+
+      - name: Build assets
+        run: npm run build
+
       - name: Run backend tests
         run: php artisan test --coverage
 

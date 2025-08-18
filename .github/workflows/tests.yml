@@ -40,7 +40,7 @@ jobs:
         run: cp .env.testing .env
 
       - name: Generate key
-        run: php artisan key:generate --env=testing
+        run: php artisan key:generate --env=testing --show
 
       - name: Run migrations
         run: php artisan migrate --force

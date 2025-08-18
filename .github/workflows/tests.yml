@@ -12,10 +12,9 @@ on:
 
 jobs:
   backend:
-    name: Laravel backend tests
+    name: Setup Laravel backend
     runs-on: ubuntu-latest
     environment: testing
-
     services:
       redis:
         image: redis:latest
@@ -26,7 +25,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -66,25 +64,39 @@ jobs:
           echo "CLOUDINARY_API_SECRET=${{secrets.CLOUDINARY_API_SECRET}}" >> .env
           echo "CLOUDINARY_SECURE_URL=${{secrets.CLOUDINARY_SECURE_URL}}" >> .env
 
+  backend-test:
+    name: Laravel backend tests
+    runs-on: ubuntu-latest
+    needs: backend
+
+    steps:
       - name: Run backend tests
         run: php artisan test --coverage
 
-  frontend:
+  playwright-test:
     name: React Playwright tests
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    needs: backend
 
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
+
       - name: Install dependencies
         run: npm ci
+
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
+
+      - name: Run Laravel backend & Laravel reverb
+        run: php artisan serve & php artisan reverb:start
+
       - name: Run Playwright tests
         run: npx playwright test
+
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:

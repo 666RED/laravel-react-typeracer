@@ -16,9 +16,11 @@ class QuoteSeeder extends Seeder
    */
   public function run(): void
   {
-    $quotes = app()->environment(['testing'])
-      ? Storage::json('test-quotes.json')
-      : Storage::json('quotes.json');
+    $quotesPath = app()->environment(['testing'])
+      ? database_path('seeders/data/test-quotes.json')
+      : database_path('seeders/data/quotes.json');
+
+    $quotes = json_decode(file_get_contents($quotesPath), true);
 
     $chunks = array_chunk($quotes, 100);
 

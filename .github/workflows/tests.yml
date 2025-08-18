@@ -43,7 +43,7 @@ jobs:
         run: php artisan key:generate
 
       - name: Clear config cache
-        run: php artisan config:clear
+        run: php artisan config:cache
 
       - name: Run migrations
         run: php artisan migrate --force

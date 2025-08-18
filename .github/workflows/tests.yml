@@ -36,9 +36,6 @@ jobs:
       - name: Install Composer deps
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Copy .env
-        run: cp .env.testing .env
-
       - name: Generate key
         run: php artisan key:generate --env=testing
 
@@ -53,22 +50,22 @@ jobs:
 
       - name: Setup Cloudinary configuation
         run: |
-          echo "" >> .env
-          echo "CLOUDINARY_URL=${{secrets.CLOUDINARY_URL}}" >> .env
-          echo "CLOUDINARY_CLOUD_NAME=${{secrets.CLOUDINARY_CLOUD_NAME}}" >> .env
-          echo "CLOUDINARY_API_KEY=${{secrets.CLOUDINARY_API_KEY}}" >> .env
-          echo "CLOUDINARY_API_SECRET=${{secrets.CLOUDINARY_API_SECRET}}" >> .env
-          echo "CLOUDINARY_SECURE_URL=${{secrets.CLOUDINARY_SECURE_URL}}" >> .env
+          echo "" >> .env.testing
+          echo "CLOUDINARY_URL=${{secrets.CLOUDINARY_URL}}" >> .env.testing
+          echo "CLOUDINARY_CLOUD_NAME=${{secrets.CLOUDINARY_CLOUD_NAME}}" >> .env.testing
+          echo "CLOUDINARY_API_KEY=${{secrets.CLOUDINARY_API_KEY}}" >> .env.testing
+          echo "CLOUDINARY_API_SECRET=${{secrets.CLOUDINARY_API_SECRET}}" >> .env.testing
+          echo "CLOUDINARY_SECURE_URL=${{secrets.CLOUDINARY_SECURE_URL}}" >> .env.testing
 
       - name: Setup Laravel reverb configuration
         run: |
           echo "" >> .env
-          echo "REVERB_APP_ID=${{secrets.REVERB_APP_ID}}" >> .env
-          echo "REVERB_APP_KEY=${{secrets.REVERB_APP_KEY}}" >> .env
-          echo "REVERB_APP_SECRET=${{secrets.REVERB_APP_SECRET}}" >> .env
-          echo "REVERB_HOST=${{secrets.REVERB_HOST}}" >> .env
-          echo "REVERB_PORT=${{secrets.REVERB_PORT}}" >> .env
-          echo "REVERB_SCHEME=${{secrets.REVERB_SCHEME}}" >> .env
+          echo "REVERB_APP_ID=${{secrets.REVERB_APP_ID}}" >> .env.testing
+          echo "REVERB_APP_KEY=${{secrets.REVERB_APP_KEY}}" >> .env.testing
+          echo "REVERB_APP_SECRET=${{secrets.REVERB_APP_SECRET}}" >> .env.testing
+          echo "REVERB_HOST=${{secrets.REVERB_HOST}}" >> .env.testing
+          echo "REVERB_PORT=${{secrets.REVERB_PORT}}" >> .env.testing
+          echo "REVERB_SCHEME=${{secrets.REVERB_SCHEME}}" >> .env.testing
 
       - name: Run Laravel tests
         run: php artisan test --coverage

@@ -7,40 +7,38 @@ import typescript from 'typescript-eslint';
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
-  js.configs.recommended,
-  ...typescript.configs.recommended,
-  {
-    ...react.configs.flat.recommended,
-    ...react.configs.flat['jsx-runtime'], // Required for React 17+
-    languageOptions: {
-      globals: {
-        ...globals.browser,
-      },
+    js.configs.recommended,
+    ...typescript.configs.recommended,
+    {
+        ...react.configs.flat.recommended,
+        ...react.configs.flat['jsx-runtime'], // Required for React 17+
+        languageOptions: {
+            globals: {
+                ...globals.browser,
+            },
+        },
+        rules: {
+            'react/react-in-jsx-scope': 'off',
+            'react/prop-types': 'off',
+            'react/no-unescaped-entities': 'off',
+        },
+        settings: {
+            react: {
+                version: 'detect',
+            },
+        },
     },
-    rules: {
-      'react/react-in-jsx-scope': 'off',
-      'react/prop-types': 'off',
-      'react/no-unescaped-entities': 'off',
-      '@typescript-eslint/no-unused-vars': 'warn',
-      '@typescript-eslint/no-explicit-any': 'warn',
+    {
+        plugins: {
+            'react-hooks': reactHooks,
+        },
+        rules: {
+            'react-hooks/rules-of-hooks': 'error',
+            'react-hooks/exhaustive-deps': 'warn',
+        },
     },
-    settings: {
-      react: {
-        version: 'detect',
-      },
+    {
+        ignores: ['vendor', 'node_modules', 'public', 'bootstrap/ssr', 'tailwind.config.js'],
     },
-  },
-  {
-    plugins: {
-      'react-hooks': reactHooks,
-    },
-    rules: {
-      'react-hooks/rules-of-hooks': 'warn',
-      'react-hooks/exhaustive-deps': 'warn',
-    },
-  },
-  {
-    ignores: ['vendor', 'node_modules', 'public', 'bootstrap/ssr', 'tailwind.config.js'],
-  },
-  prettier, // Turn off all rules that might conflict with Prettier
+    prettier, // Turn off all rules that might conflict with Prettier
 ];

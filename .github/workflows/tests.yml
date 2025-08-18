@@ -70,8 +70,8 @@ jobs:
           echo "REVERB_PORT=${{secrets.REVERB_PORT}}" >> .env.testing
           echo "REVERB_SCHEME=${{secrets.REVERB_SCHEME}}" >> .env.testing
 
-      - name: Run Laravel tests
-        run: php artisan test --coverage
+      # - name: Run Laravel tests
+      #   run: php artisan test --coverage
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps

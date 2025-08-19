@@ -47,10 +47,8 @@ jobs:
       - name: Generate Application Key
         run: php artisan key:generate
 
-      - name: Ensure SQLite database exists
-        run: |
-          mkdir -p database
-          touch database/database.sqlite
+      - name: Run migrations
+        run: php artisan migrate --force
 
       - name: Clear caches
         run: |
@@ -58,9 +56,6 @@ jobs:
           php artisan cache:clear
           php artisan route:clear
           php artisan view:clear
-
-      - name: Run migrations
-        run: php artisan migrate --force
 
       - name: Install JS dependencies
         run: npm ci

@@ -80,9 +80,6 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Start frontend
-        run: npm run frontend
-
       - name: Start backend
         run: php artisan serve --host=127.0.0.1 --port=8000 --env=testing &
 

@@ -80,19 +80,6 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Start Reverb
-        run: php artisan reverb:start &
-
-      - name: Wait for backend
-        run: |
-          for i in {1..10}; do
-            if curl http://127.0.0.1:8000 > /dev/null 2>&1; then
-              echo "Backend is up!"
-              break
-            fi
-            sleep 5
-          done
-
       - name: Run Playwright tests
         run: npx playwright test
 

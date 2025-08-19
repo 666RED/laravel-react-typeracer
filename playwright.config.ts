@@ -33,11 +33,11 @@ export default defineConfig<LaravelOptions>({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: process.env.BASE_URL,
+    baseURL: process.env.APP_URL,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
-    laravelBaseUrl: `${process.env.BASE_URL}/playwright`,
+    laravelBaseUrl: `${process.env.APP_URL}/playwright`,
   },
 
   /* Configure projects for major browsers */
@@ -102,9 +102,19 @@ export default defineConfig<LaravelOptions>({
   ],
 
   /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://localhost:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
+  webServer: [
+    {
+      command: 'php artisan serve --host=127.0.0.1 --port=8000',
+      url: process.env.APP_URL,
+      reuseExistingServer: !process.env.CI,
+      env: {
+        // Pass any necessary environment variables here
+      },
+    },
+    {
+      command: 'php artisan reverb:start',
+      url: 'http://127.0.0.1:8080', // Assuming Reverb runs on a different port
+      reuseExistingServer: !process.env.CI,
+    },
+  ],
 });

@@ -68,8 +68,8 @@ jobs:
       - name: Show .env.testing for debugging
         run: cat .env.testing
 
-      - name: Generate key
-        run: php artisan key:generate --env=testing
+      # - name: Generate key
+      #   run: php artisan key:generate --env=testing
 
       - name: Run migrations
         run: php artisan migrate --force --env=testing

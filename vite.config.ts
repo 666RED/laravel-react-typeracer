@@ -5,12 +5,12 @@ import { resolve } from 'node:path';
 import path from 'path';
 import { defineConfig } from 'vite';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [
     laravel({
       input: ['resources/css/app.css', 'resources/js/app.tsx'],
       ssr: 'resources/js/ssr.tsx',
-      refresh: true,
+      refresh: mode === 'production',
     }),
     react(),
     tailwindcss(),
@@ -24,15 +24,18 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'resources/js'),
     },
   },
-  server: {
-    host: '0.0.0.0',
-    port: 5173,
-    hmr: {
-      host: 'localhost',
-      port: 5173,
-    },
-    watch: {
-      usePolling: process.env.APP_URL === 'http://localhost', // only run in docker dev
-    },
-  },
-});
+  server:
+    mode === 'development'
+      ? {
+          host: '0.0.0.0',
+          port: 5173,
+          hmr: {
+            host: 'localhost',
+            port: 5173,
+          },
+          watch: {
+            usePolling: process.env.APP_URL === 'http://localhost', // only run in docker dev
+          },
+        }
+      : undefined,
+}));

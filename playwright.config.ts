@@ -101,7 +101,7 @@ export default defineConfig<LaravelOptions>({
   /* Run your local dev server before starting the tests */
   webServer: [
     {
-      command: 'php artisan serve',
+      command: 'php artisan serve --host=127.0.0.1 --port=8000',
       url: process.env.APP_URL,
       reuseExistingServer: !process.env.CI,
     },

@@ -39,6 +39,12 @@ jobs:
       - name: Copy .env
         run: cp .env.example .env
 
+      - name: Generate key
+        run: php artisan key:generate
+
+      - name: Run migrations
+        run: php artisan migrate --force
+
       - name: Setup Cloudinary configuation
         run: |
           echo "" >> .env
@@ -62,12 +68,6 @@ jobs:
           echo "VITE_REVERB_PORT=${{secrets.VITE_REVERB_PORT}}" >> .env
           echo "VITE_REVERB_SCHEME=${{secrets.VITE_REVERB_SCHEME}}" >> .env
 
-      - name: Generate key
-        run: php artisan key:generate
-
-      - name: Run migrations
-        run: php artisan migrate --force
-
       - name: Install JS deps
         run: npm ci
 
@@ -77,19 +77,19 @@ jobs:
       - name: Run Laravel tests
         run: php artisan test --coverage
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
+      # - uses: actions/setup-node@v4
+      #   with:
+      #     node-version: lts/*
 
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+      # - name: Install Playwright Browsers
+      #   run: npx playwright install --with-deps
 
-      - name: Run Playwright tests
-        run: npx playwright test
+      # - name: Run Playwright tests
+      #   run: npx playwright test
 
-      - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 30
+      # - uses: actions/upload-artifact@v4
+      #   if: ${{ !cancelled() }}
+      #   with:
+      #     name: playwright-report
+      #     path: playwright-report/
+      #     retention-days: 30

@@ -37,7 +37,7 @@ jobs:
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Copy .env
-        run: cp .env.testing .env
+        run: cp .env.example .env
 
       - name: Setup Cloudinary configuation
         run: |
@@ -65,9 +65,6 @@ jobs:
       - name: Generate key
         run: php artisan key:generate
 
-      - name: Echo .env file
-        run: cat .env
-
       - name: Run migrations
         run: php artisan migrate --force
 
@@ -76,10 +73,6 @@ jobs:
 
       - name: Build assets
         run: npm run build
-
-      - name: Cache Laravel configs
-        run: |
-          php artisan config:cache
 
       - name: Run Laravel tests
         run: php artisan test --coverage

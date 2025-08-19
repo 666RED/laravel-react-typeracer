@@ -66,7 +66,7 @@ jobs:
         run: php artisan key:generate
 
       - name: Run migrations
-        run: php artisan migrate --force --env=testing
+        run: php artisan migrate --force
 
       - name: Install JS deps
         run: npm ci

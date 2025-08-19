@@ -11,7 +11,7 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-dotenv.config({ path: path.resolve(__dirname, `.env.${process.env.APP_ENV}`) });
+dotenv.config({ path: path.resolve(__dirname, `.env`) });
 
 /**
  * See https://playwright.dev/docs/test-configuration.

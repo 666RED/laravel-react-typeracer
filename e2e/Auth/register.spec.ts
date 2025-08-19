@@ -33,6 +33,20 @@ test('Should register new user', async ({ page, toaster }) => {
   await page.waitForURL('/');
 });
 
+test('check asset loading', async ({ page }) => {
+  await page.goto('/');
+  const requests = [];
+
+  page.on('request', (req) => {
+    requests.push(req.url());
+  });
+
+  // wait until page is loaded
+  await page.waitForLoadState('networkidle');
+
+  console.log('Requests:', requests);
+});
+
 // test.describe('Should fail to register new user', () => {
 //   test('Email already existed', async ({ page, toaster }) => {
 //     await page.goto('/register');

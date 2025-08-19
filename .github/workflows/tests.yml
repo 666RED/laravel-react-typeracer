@@ -47,6 +47,13 @@ jobs:
       - name: Generate Application Key
         run: php artisan key:generate
 
+      - name: Clear caches
+        run: |
+          php artisan config:clear
+          php artisan cache:clear
+          php artisan route:clear
+          php artisan view:clear
+
       - name: Run migrations
         run: php artisan migrate --force
 

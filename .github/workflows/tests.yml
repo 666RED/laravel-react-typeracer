@@ -74,8 +74,8 @@ jobs:
       - name: Build assets
         run: npm run build
 
-      # - name: Run Laravel tests
-      #   run: php artisan test --coverage
+      - name: Run Laravel tests
+        run: php artisan test --coverage
 
       - uses: actions/setup-node@v4
         with:

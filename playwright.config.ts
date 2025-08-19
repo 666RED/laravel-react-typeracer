@@ -104,7 +104,7 @@ export default defineConfig<LaravelOptions>({
   /* Run your local dev server before starting the tests */
   webServer: [
     {
-      command: 'npm run backend-test',
+      command: 'php artisan serve --env=testing',
       url: process.env.APP_URL,
       reuseExistingServer: !process.env.CI,
     },

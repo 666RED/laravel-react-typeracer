@@ -11,50 +11,39 @@ on:
       - main
 
 jobs:
-  backend:
-    name: Laravel backend tests
+  test:
     runs-on: ubuntu-latest
     environment: testing
-
     services:
       redis:
         image: redis:latest
-        ports:
-          - 6379:6379
+        ports: ['6379:6379']
         options: >-
           --health-cmd "redis-cli ping"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.2
-          tools: composer:v2
           extensions: pdo, pgsql, pdo_pgsql, redis
-          coverage: xdebug
+          tools: composer:v2
 
-      - name: Install Dependencies
+      - name: Install Composer deps
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Copy Environment File
+      - name: Copy .env
         run: cp .env.example .env
 
-      - name: Generate Application Key
+      - name: Generate key
         run: php artisan key:generate
 
       - name: Run migrations
         run: php artisan migrate --force
-
-      - name: Install JS dependencies
-        run: npm ci
-
-      - name: Build assets
-        run: npm run build
 
       - name: Setup Cloudinary configuation
         run: |
@@ -65,5 +54,42 @@ jobs:
           echo "CLOUDINARY_API_SECRET=${{secrets.CLOUDINARY_API_SECRET}}" >> .env
           echo "CLOUDINARY_SECURE_URL=${{secrets.CLOUDINARY_SECURE_URL}}" >> .env
 
-      - name: Run backend tests
+      - name: Setup Reverb + Pusher config
+        run: |
+          echo "" >> .env
+          echo "REVERB_APP_ID=${{secrets.REVERB_APP_ID}}" >> .env
+          echo "REVERB_APP_KEY=${{secrets.REVERB_APP_KEY}}" >> .env
+          echo "REVERB_APP_SECRET=${{secrets.REVERB_APP_SECRET}}" >> .env
+          echo "REVERB_HOST=${{secrets.REVERB_HOST}}" >> .env
+          echo "REVERB_PORT=${{secrets.REVERB_PORT}}" >> .env
+          echo "REVERB_SCHEME=${{secrets.REVERB_SCHEME}}" >> .env
+          echo "VITE_REVERB_APP_KEY=${{secrets.VITE_REVERB_APP_KEY}}" >> .env
+          echo "VITE_REVERB_HOST=${{secrets.VITE_REVERB_HOST}}" >> .env
+          echo "VITE_REVERB_PORT=${{secrets.VITE_REVERB_PORT}}" >> .env
+          echo "VITE_REVERB_SCHEME=${{secrets.VITE_REVERB_SCHEME}}" >> .env
+
+      - name: Install JS deps
+        run: npm ci
+
+      - name: Build assets
+        run: npm run build
+
+      - name: Run Laravel tests
         run: php artisan test --coverage
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Run Playwright tests
+        run: npx playwright test
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30

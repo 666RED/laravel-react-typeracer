@@ -11,6 +11,8 @@ import { expect, test } from '../fixtures/index';
 // });
 
 test('Should register new user', async ({ page, toaster }) => {
+  console.log(process.env.APP_KEY);
+
   await page.goto('/register');
 
   const registerBtn = page.getByRole('button', { name: 'Register' });

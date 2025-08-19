@@ -77,6 +77,13 @@ jobs:
       - name: Build assets
         run: npm run build
 
+      - name: Clear Laravel caches
+        run: |
+          php artisan config:clear
+          php artisan cache:clear
+          php artisan route:clear
+          php artisan view:clear
+
       - name: Run Laravel tests
         run: php artisan test --coverage
 

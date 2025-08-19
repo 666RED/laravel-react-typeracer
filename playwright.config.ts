@@ -102,19 +102,9 @@ export default defineConfig<LaravelOptions>({
   ],
 
   /* Run your local dev server before starting the tests */
-  webServer: [
-    {
-      command: 'php artisan serve --host=127.0.0.1 --port=8000 --env=testing',
-      url: process.env.APP_URL,
-      reuseExistingServer: !process.env.CI,
-      env: {
-        // Pass any necessary environment variables here
-      },
-    },
-    {
-      command: 'php artisan reverb:start',
-      url: 'http://127.0.0.1:8080', // Assuming Reverb runs on a different port
-      reuseExistingServer: !process.env.CI,
-    },
-  ],
+  // webServer: {
+  //   command: 'npm run start',
+  //   url: 'http://localhost:3000',
+  //   reuseExistingServer: !process.env.CI,
+  // },
 });

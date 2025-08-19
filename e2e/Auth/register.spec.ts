@@ -14,6 +14,8 @@ test('Should register new user', async ({ page, toaster }) => {
   await page.goto('/register');
 
   const registerBtn = page.getByRole('button', { name: 'Register' });
+  await page.waitForSelector('button:has-text("Register")');
+
   await expect(registerBtn).toBeDisabled();
 
   await page.getByRole('textbox', { name: 'Name:' }).click();
@@ -31,12 +33,6 @@ test('Should register new user', async ({ page, toaster }) => {
   await page.getByRole('button', { name: 'Register' }).click();
   await toaster.waitFor('Registered successfully');
   await page.waitForURL('/');
-});
-
-test('check HTML source', async ({ page }) => {
-  await page.goto('/');
-  const html = await page.content();
-  console.log(html);
 });
 
 // test.describe('Should fail to register new user', () => {

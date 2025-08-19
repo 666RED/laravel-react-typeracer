@@ -70,6 +70,9 @@ jobs:
       - name: Generate key
         run: php artisan key:generate --env=testing
 
+      - name: Show .env for debugging
+        run: cat .env
+
       - name: Clear caches
         run: |
           php artisan config:clear

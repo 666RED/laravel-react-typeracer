@@ -65,6 +65,9 @@ jobs:
       - name: Generate key
         run: php artisan key:generate
 
+      - name: Echo .env file
+        run: cat .env
+
       - name: Run migrations
         run: php artisan migrate --force
 

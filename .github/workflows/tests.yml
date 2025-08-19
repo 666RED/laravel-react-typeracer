@@ -51,9 +51,6 @@ jobs:
       - name: Build assets
         run: npm run build
 
-      - name: Remove Vite hot file
-        run: rm -f public/hot
-
       - name: Setup Cloudinary configuation
         run: |
           echo "" >> .env.testing

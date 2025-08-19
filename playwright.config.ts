@@ -34,7 +34,7 @@ export default defineConfig<LaravelOptions>({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
-    laravelBaseUrl: `${process.env.APP_URL}/playwright`,
+    laravelBaseUrl: `http://localhost:8000/playwright`,
   },
 
   /* Configure projects for major browsers */

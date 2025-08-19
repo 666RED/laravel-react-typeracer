@@ -63,9 +63,7 @@ jobs:
           echo "VITE_REVERB_SCHEME=${{secrets.VITE_REVERB_SCHEME}}" >> .env
 
       - name: Generate key
-        run: |
-          echo "" >> .env
-          echo "APP_KEY=${{secrets.APP_KEY}}" >> .env
+        run: php artisan key:generate
 
       - name: Echo .env file
         run: cat .env

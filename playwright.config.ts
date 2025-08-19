@@ -104,23 +104,9 @@ export default defineConfig<LaravelOptions>({
   /* Run your local dev server before starting the tests */
   webServer: [
     {
-      // The Laravel backend server
       command: 'php artisan serve --env=testing',
-      url: 'http://127.0.0.1:8000',
+      url: process.env.APP_URL,
       reuseExistingServer: !process.env.CI,
-      // Wait for the backend to be ready
-      timeout: 120 * 1000,
-      env: {
-        APP_URL: 'http://127.0.0.1:8000',
-      },
-    },
-    {
-      // The Vite dev server
-      command: 'npm run dev',
-      url: 'http://127.0.0.1:5173',
-      reuseExistingServer: !process.env.CI,
-      // Wait for the frontend to be ready
-      timeout: 120 * 1000,
     },
   ],
 });

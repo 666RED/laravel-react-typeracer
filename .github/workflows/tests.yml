@@ -81,7 +81,7 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Start backend
-        run: php artisan serve --host=127.0.0.1 --port=8000 &
+        run: php artisan serve --host=127.0.0.1 --port=8000 --env=testing &
 
       - name: Start Reverb
         run: php artisan reverb:start &

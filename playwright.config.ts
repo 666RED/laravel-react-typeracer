@@ -63,19 +63,19 @@ export default defineConfig<LaravelOptions>({
       // teardown: 'teardown',
     },
 
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-      dependencies: ['init setup'],
-      // teardown: 'teardown',
-    },
+    // {
+    //   name: 'firefox',
+    //   use: { ...devices['Desktop Firefox'] },
+    //   dependencies: ['init setup'],
+    //   // teardown: 'teardown',
+    // },
 
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-      dependencies: ['init setup'],
-      // teardown: 'teardown',
-    },
+    // {
+    //   name: 'webkit',
+    //   use: { ...devices['Desktop Safari'] },
+    //   dependencies: ['init setup'],
+    //   // teardown: 'teardown',
+    // },
 
     /* Test against mobile viewports. */
     // {

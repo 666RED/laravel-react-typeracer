@@ -45,19 +45,10 @@ jobs:
         run: cp .env.example .env
 
       - name: Generate Application Key
-        run: |
-          echo "" >> .env
-          echo "APP_KEY=${{secrets.APP_KEY}}" >> .env
+        run: php artisan key:generate
 
       - name: Run migrations
         run: php artisan migrate --force
-
-      - name: Clear caches
-        run: |
-          php artisan config:clear
-          php artisan cache:clear
-          php artisan route:clear
-          php artisan view:clear
 
       - name: Install JS dependencies
         run: npm ci
@@ -73,5 +64,6 @@ jobs:
           echo "CLOUDINARY_API_KEY=${{secrets.CLOUDINARY_API_KEY}}" >> .env
           echo "CLOUDINARY_API_SECRET=${{secrets.CLOUDINARY_API_SECRET}}" >> .env
           echo "CLOUDINARY_SECURE_URL=${{secrets.CLOUDINARY_SECURE_URL}}" >> .env
+
       - name: Run backend tests
         run: php artisan test --coverage

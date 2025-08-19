@@ -16,7 +16,7 @@ class QuoteSeeder extends Seeder
    */
   public function run(): void
   {
-    $quotesPath = app()->environment(['testing'])
+    $quotesPath = app()->environment(['testing', 'local'])
       ? database_path('seeders/data/test-quotes.json')
       : database_path('seeders/data/quotes.json');
 

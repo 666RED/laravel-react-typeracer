@@ -80,9 +80,6 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Start backend
-        run: php artisan serve --env=testing &
-
       - name: Start Reverb
         run: php artisan reverb:start &
 

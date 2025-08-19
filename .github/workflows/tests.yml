@@ -68,7 +68,7 @@ jobs:
           } >> .env
 
       - name: Show .env for debugging
-        run: cat .env
+        run: cat .env.testing
 
       - name: Clear caches
         run: |

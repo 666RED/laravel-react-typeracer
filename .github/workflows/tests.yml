@@ -39,10 +39,8 @@ jobs:
       - name: Copy .env
         run: cp .env.testing .env
 
-      - name: Setup App Key
-        run: |
-          echo "" >> .env.testing
-          echo "APP_KEY=${{secrets.APP_KEY}}" >> .env.testing
+      - name: Generate key
+        run: php artisan key:generate --env=testing
 
       - name: Run migrations
         run: php artisan migrate --force

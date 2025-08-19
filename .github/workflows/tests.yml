@@ -39,6 +39,9 @@ jobs:
       - name: Copy .env
         run: cp .env.testing .env
 
+      - name: Clear config
+        run: php artisan config:clear
+
       - name: Generate key
         run: php artisan key:generate --env=testing
 

@@ -71,11 +71,6 @@ jobs:
       - name: Generate key
         run: php artisan key:generate --env=testing
 
-      - name: Clear caches
-        run: |
-          php artisan config:clear
-          php artisan cache:clear
-
       - name: Run migrations
         run: php artisan migrate --force --env=testing
 

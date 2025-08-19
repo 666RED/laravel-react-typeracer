@@ -33,18 +33,10 @@ test('Should register new user', async ({ page, toaster }) => {
   await page.waitForURL('/');
 });
 
-test('check asset loading', async ({ page }) => {
+test('check HTML source', async ({ page }) => {
   await page.goto('/');
-  const requests = [];
-
-  page.on('request', (req) => {
-    requests.push(req.url());
-  });
-
-  // wait until page is loaded
-  await page.waitForLoadState('networkidle');
-
-  console.log('Requests:', requests);
+  const html = await page.content();
+  console.log(html);
 });
 
 // test.describe('Should fail to register new user', () => {

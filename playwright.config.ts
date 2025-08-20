@@ -1,14 +1,17 @@
 import type { LaravelOptions } from '@hyvor/laravel-playwright';
 import { defineConfig, devices } from '@playwright/test';
+import dotenv from 'dotenv';
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
 
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = dirname(__filename);
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -30,11 +33,11 @@ export default defineConfig<LaravelOptions>({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: 'http://localhost:8000',
+    baseURL: process.env.APP_URL,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
-    laravelBaseUrl: `http://localhost:8000/playwright`,
+    laravelBaseUrl: `${process.env.APP_URL}/playwright`,
   },
 
   /* Configure projects for major browsers */
@@ -44,38 +47,23 @@ export default defineConfig<LaravelOptions>({
       testMatch: /global\.setup\.ts/,
     },
 
-    // {
-    //   name: 'auth setup',
-    //   testMatch: /auth\.setup\.ts/,
-    //   dependencies: ['init setup'],
-    // },
-
-    // {
-    //   name: 'teardown',
-    //   testMatch: /global\.teardown\.ts/,
-    // },
-
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
       dependencies: ['init setup'],
-
-      // teardown: 'teardown',
     },
 
-    // {
-    //   name: 'firefox',
-    //   use: { ...devices['Desktop Firefox'] },
-    //   dependencies: ['init setup'],
-    //   // teardown: 'teardown',
-    // },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+      dependencies: ['init setup'],
+    },
 
-    // {
-    //   name: 'webkit',
-    //   use: { ...devices['Desktop Safari'] },
-    //   dependencies: ['init setup'],
-    //   // teardown: 'teardown',
-    // },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+      dependencies: ['init setup'],
+    },
 
     /* Test against mobile viewports. */
     // {

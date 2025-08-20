@@ -35,7 +35,7 @@ test.describe('Should fail to login', () => {
     await page.goto('/login');
 
     await page.getByRole('textbox', { name: 'Email:' }).click();
-    await page.getByRole('textbox', { name: 'Email:' }).fill('test2@gmail.com');
+    await page.getByRole('textbox', { name: 'Email:' }).fill('test123@gmail.com');
     await page.getByRole('textbox', { name: 'Password:' }).click();
     await page.getByRole('textbox', { name: 'Password:' }).fill('12341234');
     await page.getByRole('button', { name: 'Login' }).click();

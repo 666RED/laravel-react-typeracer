@@ -10,16 +10,18 @@ test('Should navigate to register page', async ({ page }) => {
   await expect(page.getByTestId('register-form')).toBeVisible();
 });
 
-test('Should register new user', async ({ page, toaster }) => {
+test('Should register new user', async ({ page, toaster }, testInfo) => {
   await page.goto('/register');
 
   const registerBtn = page.getByRole('button', { name: 'Register' });
   await expect(registerBtn).toBeDisabled();
 
+  const uniqueEmail = `${testInfo.project.name}_test@example.com`;
+
   await page.getByRole('textbox', { name: 'Name:' }).click();
   await page.getByRole('textbox', { name: 'Name:' }).fill('Test name');
   await page.getByRole('textbox', { name: 'Email:' }).click();
-  await page.getByRole('textbox', { name: 'Email:' }).fill('test2@gmail.com');
+  await page.getByRole('textbox', { name: 'Email:' }).fill(uniqueEmail);
 
   await page.getByRole('textbox', { name: 'Password:' }).click();
   await page.getByRole('textbox', { name: 'Password:' }).fill('12341234');

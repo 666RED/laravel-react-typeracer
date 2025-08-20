@@ -78,7 +78,7 @@ jobs:
         run: npm run build
 
       - name: Run Laravel Reverb
-        run: php artisan reverb:start --host=localhost --port=8080
+        run: php artisan reverb:start --host=127.0.0.1 --port=8080
 
       - name: Run Laravel tests
         run: php artisan test --coverage

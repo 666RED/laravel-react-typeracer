@@ -38,4 +38,5 @@ export default defineConfig({
   build: {
     outDir: './public/build',
   },
+  base: process.env.VITE_BASE_PATH || '/laravel-react-typeracer',
 });

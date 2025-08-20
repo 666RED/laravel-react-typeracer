@@ -1,14 +1,9 @@
 name: Test Laravel with Pest and React with Playwright
 
 on:
-  push:
-    branches:
-      - staging
-      - main
   pull_request:
     branches:
       - staging
-      - main
 
 jobs:
   test:

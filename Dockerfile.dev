@@ -1,0 +1,44 @@
+FROM php:8.4-fpm
+
+# Install required dependencies
+RUN apt-get update && apt-get install -y \
+    libzip-dev \
+    libpng-dev \
+    postgresql-client \
+    libpq-dev \
+    && docker-php-ext-configure pcntl --enable-pcntl \
+    && docker-php-ext-install \ 
+      pdo \
+      pgsql \
+      pdo_pgsql \
+      gd \
+      bcmath \
+      zip \ 
+      pcntl \
+    && pecl install redis \
+    && docker-php-ext-enable redis \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Install Composer
+COPY --from=composer/composer:latest-bin /composer /usr/bin/composer
+
+WORKDIR /usr/share/nginx/html
+
+COPY composer.json composer.lock ./
+RUN composer install --no-scripts --no-autoloader --prefer-dist --no-dev
+
+COPY . .
+
+RUN composer dump-autoload --optimize
+
+# Give permisisons to everything in bin/
+RUN chmod a+x /usr/local/bin/*
+
+COPY ./scripts/entrypoint.dev.sh /usr/local/bin/entrypoint.sh
+COPY ./scripts/waitForReady.dev.sh /usr/local/bin/wait-for-ready.sh
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+EXPOSE 9000
+
+CMD ["php-fpm"]

@@ -8,8 +8,8 @@
 /storage/pail
 /vendor
 .env
-.env.backup
-.env.production
+.env.testing
+.env.prod
 .phpactor.json
 .phpunit.result.cache
 Homestead.json
@@ -22,3 +22,10 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+archive
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

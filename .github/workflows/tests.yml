@@ -40,12 +40,12 @@ jobs:
         run: cp .env.example .env
 
       - name: Generate key
-        run: php artisan key:generate --ansi --no-interaction
-
-      - name: Run migrations
         run: |
           echo "" >> .env
           echo "APP_KEY=${{secrets.APP_KEY}}" >> .env
+
+      - name: Run migrations
+        run: php artisan migrate --force
 
       - name: Setup Cloudinary configuation
         run: |

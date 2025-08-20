@@ -35,4 +35,7 @@ export default defineConfig({
       usePolling: process.env.APP_URL === 'http://localhost', // only run in docker dev
     },
   },
+  build: {
+    outDir: './public/build',
+  },
 });

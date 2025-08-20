@@ -40,7 +40,7 @@ jobs:
         run: cp .env.example .env
 
       - name: Generate key
-        run: php artisan key:generate
+        run: php artisan key:generate --ansi --no-interaction
 
       - name: Run migrations
         run: php artisan migrate --force

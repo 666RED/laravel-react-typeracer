@@ -39,14 +39,6 @@ jobs:
       - name: Copy .env
         run: cp .env.example .env
 
-      - name: Generate key
-        run: |
-          echo "" >> .env
-          echo "APP_KEY=${{secrets.APP_KEY}}" >> .env
-
-      - name: Run migrations
-        run: php artisan migrate --force
-
       - name: Setup Cloudinary configuation
         run: |
           echo "" >> .env
@@ -69,6 +61,15 @@ jobs:
           echo "VITE_REVERB_HOST=${{secrets.VITE_REVERB_HOST}}" >> .env
           echo "VITE_REVERB_PORT=${{secrets.VITE_REVERB_PORT}}" >> .env
           echo "VITE_REVERB_SCHEME=${{secrets.VITE_REVERB_SCHEME}}" >> .env
+          echo "PUSHER_APP_ID=${{secrets.REVERB_APP_ID}}" >> .env
+          echo "PUSHER_APP_KEY=${{secrets.REVERB_APP_KEY}}" >> .env
+          echo "PUSHER_APP_SECRET=${{secrets.REVERB_APP_SECRET}}" >> .env
+
+      - name: Generate key
+        run: php artisan key:generate
+
+      - name: Run migrations
+        run: php artisan migrate --force
 
       - name: Install JS deps
         run: npm ci

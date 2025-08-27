@@ -26,3 +26,8 @@ README.md
 /playwright-report
 /e2e
 /tests
+/scripts
+/archive
+playwright.config.ts
+phpunit.xml
+/test-results

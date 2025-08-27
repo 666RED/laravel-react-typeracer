@@ -35,7 +35,7 @@ RUN composer dump-autoload --optimize
 RUN chmod a+x /usr/local/bin/*
 
 COPY ./scripts/entrypoint.dev.sh /usr/local/bin/entrypoint.sh
-COPY ./scripts/waitForReady.dev.sh /usr/local/bin/wait-for-ready.sh
+COPY ./scripts/waitForReady.sh /usr/local/bin/wait-for-ready.sh
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 

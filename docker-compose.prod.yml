@@ -1,127 +1,134 @@
 services:
   web:
-    image: nginx:stable-alpine3.21-perl
+    build:
+      context: .
+      dockerfile: ./docker/production/nginx/Dockerfile
+      args:
+        VITE_REVERB_APP_KEY: ${VITE_REVERB_APP_KEY}
+        VITE_REVERB_HOST: ${VITE_REVERB_HOST}
+        VITE_REVERB_PORT: ${VITE_REVERB_PORT}
+        VITE_REVERB_SCHEME: ${VITE_REVERB_SCHEME}
     container_name: nginx
-    volumes:
-      - ./docker/development/nginx/nginx.conf:/etc/nginx/templates/default.conf.template
-      - .:/usr/share/nginx/html
-      - node_modules:/usr/share/nginx/html/node_modules
-      - vendor:/usr/share/nginx/html/vendor
     ports:
       - 80:80
     restart: unless-stopped
-    networks:
-      - docker-network
-  vite:
-    build:
-      context: .
-      dockerfile: ./docker/development/vite/Dockerfile
-    image: laravel-react-typeracer-vite-dev:1.0
-    container_name: vite
-    ports:
-      - 5173:5173
     volumes:
-      - .:/app
-      - node_modules:/app/node_modules
-      - vendor:/app/vendor
+      - laravel-storage-production:/var/www/storage:ro # This volume stores persistent data like uploaded files and cache.
+      - laravel-public-assets:/var/www/public/build
     networks:
       - docker-network
+    depends_on:
+      php-fpm:
+        condition: service_healthy # Wait for php-fpm health check
+      reverb:
+        condition: service_started
     env_file:
-      - .env
-    restart: always
-  app:
+      - .env.production
+  php-fpm: &php-base
     build:
       context: .
-      dockerfile: Dockerfile.dev
-    image: red6660320/laravel-react-typeracer-dev:1.0
+      dockerfile: ./docker/common/php-fpm/Dockerfile
+      target: production # Use the 'production' stage in the Dockerfile
+    restart: unless-stopped
     container_name: app
-    restart: unless-stopped
     volumes:
-      - .:/usr/share/nginx/html
-      - node_modules:/usr/share/nginx/html/node_modules
-      - vendor:/usr/share/nginx/html/vendor
+      - laravel-storage-production:/var/www/storage # Mount the storage volume
+      - laravel-public-assets:/var/www/public/build:ro
+    env_file:
+      - .env.production
     networks:
       - docker-network
-    ports:
-      - 9000:9000
+    healthcheck:
+      test: ['CMD-SHELL', 'php-fpm-healthcheck || exit 1']
+      interval: 10s
+      timeout: 5s
+      retries: 3
     depends_on:
-      - db
-    env_file:
-      - .env
-  queue-worker:
-    build:
-      context: .
-      dockerfile: Dockerfile.dev
-    image: laravel-react-typeracer-queue-worker-dev:1.0
-    container_name: queue-worker
-    restart: unless-stopped
-    command: ['/bin/bash', '-c', '/usr/local/bin/wait-for-ready.sh php artisan queue:work']
-    volumes:
-      - .:/usr/share/nginx/html
-      - node_modules:/usr/share/nginx/html/node_modules
-      - vendor:/usr/share/nginx/html/vendor
-    environment:
-      - IS_WORKER=true
-    env_file:
-      - .env
-    networks:
-      - docker-network
-    depends_on:
-      - app
-      - redis
-  db:
+      postgres:
+        condition: service_healthy
+  postgres:
     image: postgres:17.5
+    user: postgres
     container_name: pg-db
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_DATABASE}
-      PGDATA: /var/lib/postgresql/data/dev
     ports:
-      - 5433:5432
+      - 5432:5432
+    healthcheck:
+      test: ['CMD', 'pg_isready']
+      interval: 10s
+      timeout: 5s
+      retries: 5
     volumes:
-      - app-data-dev:/var/lib/postgresql/data
+      - postgres-data-production:/var/lib/postgresql/data
     networks:
       - docker-network
-    env_file:
-      - .env
   redis:
     image: redis:7.4.5-alpine3.21
     container_name: redis
-    restart: always
+    restart: unless-stopped
     ports:
       - 6379:6379
-    volumes:
-      - redis-data-dev:/data
     networks:
       - docker-network
     env_file:
-      - .env
+      - .env.production
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 3
   reverb:
-    image: red6660320/laravel-react-typeracer-dev:1.0
+    <<: *php-base
     container_name: reverb
+    restart: unless-stopped
+    command: sh -c "php artisan reverb:start"
+    env_file:
+      - .env.production
+    volumes:
+      - laravel-public-assets:/var/www/public/build:ro
     networks:
       - docker-network
-    ports:
-      - 8080:8080
     depends_on:
-      - app
-    volumes:
-      - app-data-dev:/usr/share/nginx/html
+      php-fpm:
+        condition: service_healthy
+  queue-worker:
+    <<: *php-base
+    container_name: queue-worker
+    restart: unless-stopped
+    command: sh -c "php artisan queue:work"
     env_file:
-      - .env
-    environment:
-      - IS_WORKER=true
-      - SKIP_FIX_PERMS=1
-    command: ['/bin/bash', '-c', '/usr/local/bin/wait-for-ready.sh php artisan reverb:start']
+      - .env.production
+    volumes:
+      - laravel-storage-production:/var/www/storage:ro
+      - laravel-public-assets:/var/www/public/build:ro
+    networks:
+      - docker-network
+    depends_on:
+      php-fpm:
+        condition: service_healthy
+  scheduler:
+    <<: *php-base
+    container_name: scheduler
+    restart: unless-stopped
+    command: sh -c "php artisan schedule:work"
+    env_file:
+      - .env.production
+    volumes:
+      - laravel-storage-production:/var/www/storage:ro
+      - laravel-public-assets:/var/www/public/build:ro
+    networks:
+      - docker-network
+    depends_on:
+      php-fpm:
+        condition: service_healthy
 volumes:
-  app-data-dev:
-    driver: local
-  redis-data-dev:
-    driver: local
-  node_modules:
-  vendor:
+  postgres-data-production:
+  laravel-storage-production:
+  laravel-public-assets:
 networks:
   docker-network:
     driver: bridge

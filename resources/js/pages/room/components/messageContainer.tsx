@@ -18,7 +18,7 @@ interface Props {
 export default function MessageContainer({ messages, setMessages, isExpand, setIsExpand }: Props) {
   const { auth, currentRoom } = usePage<SharedData>().props;
 
-  const { post, data, setData, reset, processing } = useForm({
+  const { post, data, setData, processing } = useForm({
     text: '',
     senderId: auth.user.id,
     senderName: auth.user.name,
@@ -35,7 +35,7 @@ export default function MessageContainer({ messages, setMessages, isExpand, setI
 
     post(route('message.send-message'), {
       onSuccess: () => {
-        reset();
+        setData((prev) => ({ ...prev, text: '' }));
       },
     });
   };
@@ -73,6 +73,7 @@ export default function MessageContainer({ messages, setMessages, isExpand, setI
             }
             required
             className="flex-1"
+            readOnly={processing}
           />
           <Button variant="secondary" size="icon" type="submit" disabled={processing}>
             <SendHorizontalIcon />

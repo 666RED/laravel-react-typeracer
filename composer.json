@@ -19,6 +19,7 @@
     "tightenco/ziggy": "^2.5"
   },
   "require-dev": {
+    "barryvdh/laravel-ide-helper": "^3.6",
     "brianium/paratest": "^7.8",
     "fakerphp/faker": "^1.23",
     "hyvor/laravel-playwright": "^2.0",

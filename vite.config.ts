@@ -26,17 +26,12 @@ export default defineConfig({
   },
   server: {
     host: '0.0.0.0',
-    port: 5173,
     hmr: {
       host: 'localhost',
-      port: 5173,
-    },
-    watch: {
-      usePolling: process.env.APP_URL === 'http://localhost', // only run in docker dev
     },
   },
   build: {
-    outDir: './public/build',
+    modulePreload: false,
+    sourcemap: false,
   },
-  base: process.env.VITE_BASE_PATH || '/laravel-react-typeracer',
 });
